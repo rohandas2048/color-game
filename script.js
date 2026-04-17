@@ -140,7 +140,20 @@ document.addEventListener('DOMContentLoaded', () => {
     totalScoreEl.textContent = `Total: ${total} / ${TOTAL_ROUNDS * 100}`;
   }
 
+  const helpBtn = document.getElementById('help-btn');
+  const helpModal = document.getElementById('help-modal');
+  const helpClose = document.getElementById('help-close');
+  const helpBackdrop = helpModal.querySelector('.modal-backdrop');
+
+  function openHelp() { helpModal.hidden = false; }
+  function closeHelp() { helpModal.hidden = true; }
+
+  helpBtn.addEventListener('click', openHelp);
+  helpClose.addEventListener('click', closeHelp);
+  helpBackdrop.addEventListener('click', closeHelp);
+
   document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !helpModal.hidden) { closeHelp(); return; }
     const screen = app.dataset.screen;
     if (e.code === 'Space' && screen === 'start') {
       e.preventDefault();

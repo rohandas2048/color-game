@@ -170,13 +170,83 @@ h1 {
   font-size: 2.5rem;
 }
 
-.intro {
-  width: 25vw;
-  min-width: 240px;
-  text-align: center;
-  line-height: 1.5;
-  margin: 0 auto;
+.title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
 }
+
+#help-btn {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border-radius: 50%;
+  border: 2px solid #222;
+  background: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+}
+
+#help-btn:hover {
+  background: #222;
+  color: #fff;
+}
+
+.modal[hidden] { display: none; }
+
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  position: relative;
+  background: #fff;
+  padding: 2rem 2rem 1.5rem;
+  border-radius: 8px;
+  max-width: 420px;
+  width: 90vw;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  line-height: 1.5;
+}
+
+.modal-content h2 {
+  margin-bottom: 1rem;
+  font-size: 1.4rem;
+}
+
+.modal-content p + p {
+  margin-top: 0.75rem;
+}
+
+.modal-close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  font-size: 1.8rem;
+  line-height: 1;
+  cursor: pointer;
+  color: #666;
+}
+
+.modal-close:hover { color: #000; background: transparent; }
 
 button {
   padding: 0.75rem 2rem;
