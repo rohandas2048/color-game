@@ -38,7 +38,14 @@ function hsvToCss(h, s, v) {
 const state = {
   round: 1,
   target: null,
+  guesses: [],
 };
+
+function resetState() {
+  state.round = 1;
+  state.target = null;
+  state.guesses = [];
+}
 
 document.addEventListener('DOMContentLoaded', () => {
   const app = document.getElementById('app');
@@ -68,6 +75,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
   [sliderH, sliderS, sliderV].forEach(s => s.addEventListener('input', updateGuessPreview));
   updateGuessPreview();
+
+  const submitBtn = document.getElementById('submit-btn');
+  submitBtn.addEventListener('click', () => {
+    state.guesses.push({ target: state.target, guess: currentGuess() });
+    if (state.round < TOTAL_ROUNDS) {
+      state.round += 1;
+      sliderH.value = 180; sliderS.value = 50; sliderV.value = 50;
+      updateGuessPreview();
+      startRound();
+    } else {
+      app.dataset.screen = 'summary';
+      console.log('final guesses:', state.guesses);
+    }
+  });
 
   function startRound() {
     state.target = randomHSV();
