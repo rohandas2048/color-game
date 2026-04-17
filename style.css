@@ -58,6 +58,9 @@ html, body {
 }
 
 #screen-play[data-phase="reveal"] #reveal-timer { display: block; }
+#screen-play[data-phase="reveal"] { cursor: none; }
+#screen-play[data-phase="reveal"] #reveal-timer,
+#screen-play[data-phase="reveal"] #round-counter { cursor: auto; }
 
 #target-panel {
   position: fixed;
@@ -146,6 +149,21 @@ html, body {
 
 .sliders input[type="range"] {
   width: 100%;
+  height: 28px;
+}
+
+.sliders input[type="range"]::-webkit-slider-thumb {
+  width: 22px;
+  height: 22px;
+}
+
+@media (max-width: 500px) {
+  #guess-swatch {
+    width: 60vw;
+    height: 60vw;
+  }
+  .sliders { width: 90vw; }
+  #summary-rows { width: 95vw; }
 }
 
 h1 {

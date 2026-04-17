@@ -123,6 +123,17 @@ document.addEventListener('DOMContentLoaded', () => {
     totalScoreEl.textContent = `Total: ${total} / ${TOTAL_ROUNDS * 100}`;
   }
 
+  document.addEventListener('keydown', (e) => {
+    const screen = app.dataset.screen;
+    if (e.code === 'Space' && screen === 'start') {
+      e.preventDefault();
+      startBtn.click();
+    } else if (e.code === 'Enter' && screen === 'play' && screenPlay.dataset.phase === 'guess') {
+      e.preventDefault();
+      submitBtn.click();
+    }
+  });
+
   playAgainBtn.addEventListener('click', () => {
     resetState();
     sliderH.value = 180; sliderS.value = 50; sliderV.value = 50;
@@ -131,11 +142,16 @@ document.addEventListener('DOMContentLoaded', () => {
     startRound();
   });
 
+  function setSlidersDisabled(disabled) {
+    [sliderH, sliderS, sliderV].forEach(s => { s.disabled = disabled; });
+  }
+
   function startRound() {
     state.target = randomHSV();
     roundCounter.textContent = `Round ${state.round} / ${TOTAL_ROUNDS}`;
     targetPanel.style.backgroundColor = hsvToCss(state.target.h, state.target.s, state.target.v);
     screenPlay.dataset.phase = 'reveal';
+    setSlidersDisabled(true);
     console.log('target HSV:', state.target);
 
     const endAt = Date.now() + REVEAL_MS;
@@ -146,6 +162,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (remaining <= 0) {
         clearInterval(tick);
         screenPlay.dataset.phase = 'guess';
+        setSlidersDisabled(false);
       }
     }, 100);
   }
