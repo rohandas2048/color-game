@@ -46,13 +46,48 @@ function hsvToCss(h, s, v) {
   return `rgb(${r}, ${g}, ${b})`;
 }
 
+function srgbToLinear(c) {
+  c /= 255;
+  return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+}
+
+function rgbToLab(r, g, b) {
+  const R = srgbToLinear(r), G = srgbToLinear(g), B = srgbToLinear(b);
+  const X = R * 0.4124564 + G * 0.3575761 + B * 0.1804375;
+  const Y = R * 0.2126729 + G * 0.7151522 + B * 0.0721750;
+  const Z = R * 0.0193339 + G * 0.1191920 + B * 0.9503041;
+  const Xn = 0.95047, Yn = 1.0, Zn = 1.08883;
+  const eps = Math.pow(6 / 29, 3);
+  const kappa = 3 * Math.pow(6 / 29, 2);
+  const f = (t) => t > eps ? Math.cbrt(t) : t / kappa + 4 / 29;
+  const fx = f(X / Xn), fy = f(Y / Yn), fz = f(Z / Zn);
+  return {
+    L: 116 * fy - 16,
+    a: 500 * (fx - fy),
+    b: 200 * (fy - fz),
+  };
+}
+
+function deltaE(hsv1, hsv2) {
+  const c1 = hsvToRgb(hsv1.h, hsv1.s, hsv1.v);
+  const c2 = hsvToRgb(hsv2.h, hsv2.s, hsv2.v);
+  const l1 = rgbToLab(c1.r, c1.g, c1.b);
+  const l2 = rgbToLab(c2.r, c2.g, c2.b);
+  return Math.hypot(l1.L - l2.L, l1.a - l2.a, l1.b - l2.b);
+}
+
 function scoreGuess(target, guess) {
-  const dhRaw = Math.abs(target.h - guess.h);
-  const dh = Math.min(dhRaw, 360 - dhRaw) / 180;
-  const ds = Math.abs(target.s - guess.s) / 100;
-  const dv = Math.abs(target.v - guess.v) / 100;
-  const score = Math.round(100 * (1 - (dh + ds + dv) / 3));
-  return Math.max(0, score);
+  if (COLORBLIND_MODE) {
+    const mismatches =
+      (target.h === guess.h ? 0 : 1) +
+      (target.s === guess.s ? 0 : 1) +
+      (target.v === guess.v ? 0 : 1);
+    return [100, 50, 25, 0][mismatches];
+  }
+  const dE = deltaE(target, guess);
+  const MAX_DE = 100;
+  const score = Math.round(100 * Math.max(0, 1 - dE / MAX_DE));
+  return score;
 }
 
 const state = {
