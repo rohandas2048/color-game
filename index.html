@@ -13,9 +13,22 @@
       <div class="title-row">
         <h1>Color Game</h1>
         <button id="help-btn" aria-label="How to play" title="How to play">?</button>
+        <button id="settings-btn" aria-label="Settings" title="Settings">⚙</button>
       </div>
       <button id="start-btn">Start</button>
     </section>
+
+    <div id="settings-modal" class="modal" hidden>
+      <div class="modal-backdrop"></div>
+      <div class="modal-content" role="dialog" aria-labelledby="settings-title">
+        <button id="settings-close" class="modal-close" aria-label="Close">×</button>
+        <h2 id="settings-title">Settings</h2>
+        <label class="setting-row">
+          <input type="checkbox" id="cb-colorblind" checked onclick="return false;">
+          <span>Colorblind mode</span>
+        </label>
+      </div>
+    </div>
 
     <div id="help-modal" class="modal" hidden>
       <div class="modal-backdrop"></div>

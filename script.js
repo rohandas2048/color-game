@@ -1,6 +1,6 @@
 const REVEAL_MS = 3000;
 const TOTAL_ROUNDS = 5;
-const COLORBLIND_MODE = false;
+const COLORBLIND_MODE = true;
 
 function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
 
@@ -145,15 +145,27 @@ document.addEventListener('DOMContentLoaded', () => {
   const helpClose = document.getElementById('help-close');
   const helpBackdrop = helpModal.querySelector('.modal-backdrop');
 
+  const settingsBtn = document.getElementById('settings-btn');
+  const settingsModal = document.getElementById('settings-modal');
+  const settingsClose = document.getElementById('settings-close');
+  const settingsBackdrop = settingsModal.querySelector('.modal-backdrop');
+
   function openHelp() { helpModal.hidden = false; }
   function closeHelp() { helpModal.hidden = true; }
+  function openSettings() { settingsModal.hidden = false; }
+  function closeSettings() { settingsModal.hidden = true; }
 
   helpBtn.addEventListener('click', openHelp);
   helpClose.addEventListener('click', closeHelp);
   helpBackdrop.addEventListener('click', closeHelp);
 
+  settingsBtn.addEventListener('click', openSettings);
+  settingsClose.addEventListener('click', closeSettings);
+  settingsBackdrop.addEventListener('click', closeSettings);
+
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && !helpModal.hidden) { closeHelp(); return; }
+    if (e.key === 'Escape' && !settingsModal.hidden) { closeSettings(); return; }
     const screen = app.dataset.screen;
     if (e.code === 'Space' && screen === 'start') {
       e.preventDefault();
