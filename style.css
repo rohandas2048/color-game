@@ -62,12 +62,13 @@ html, body {
 #screen-play[data-phase="guess"] #guess-panel { display: flex; }
 
 #guess-swatch {
-  width: min(70vw, 400px);
-  height: min(40vh, 240px);
-  border: 2px solid #222;
-  border-radius: 8px;
+  width: min(50vw, 240px);
+  height: min(50vw, 240px);
+  border: 3px solid #222;
+  border-radius: 50%;
   background: rgb(128, 128, 128);
   margin-bottom: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .sliders {
