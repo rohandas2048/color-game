@@ -1,3 +1,6 @@
+const REVEAL_MS = 5000;
+const TOTAL_ROUNDS = 5;
+
 function randomHSV() {
   return {
     h: Math.floor(Math.random() * 360),
@@ -32,20 +35,31 @@ function hsvToCss(h, s, v) {
   return `rgb(${r}, ${g}, ${b})`;
 }
 
+const state = {
+  round: 1,
+  target: null,
+};
+
 document.addEventListener('DOMContentLoaded', () => {
   const app = document.getElementById('app');
   const startBtn = document.getElementById('start-btn');
+  const screenPlay = document.getElementById('screen-play');
+  const targetPanel = document.getElementById('target-panel');
+  const roundCounter = document.getElementById('round-counter');
 
-  function goTo(screen) {
-    app.dataset.screen = screen;
-    if (screen === 'play') {
-      const target = randomHSV();
-      document.body.style.backgroundColor = hsvToCss(target.h, target.s, target.v);
-      console.log('target HSV:', target);
-    } else {
-      document.body.style.backgroundColor = '';
-    }
+  function startRound() {
+    state.target = randomHSV();
+    roundCounter.textContent = `Round ${state.round} / ${TOTAL_ROUNDS}`;
+    targetPanel.style.backgroundColor = hsvToCss(state.target.h, state.target.s, state.target.v);
+    screenPlay.dataset.phase = 'reveal';
+    console.log('target HSV:', state.target);
+    setTimeout(() => {
+      screenPlay.dataset.phase = 'guess';
+    }, REVEAL_MS);
   }
 
-  startBtn.addEventListener('click', () => goTo('play'));
+  startBtn.addEventListener('click', () => {
+    app.dataset.screen = 'play';
+    startRound();
+  });
 });
