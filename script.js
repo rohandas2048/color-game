@@ -1,4 +1,4 @@
-const REVEAL_MS = 5000;
+const REVEAL_MS = 3000;
 const TOTAL_ROUNDS = 5;
 
 function randomHSV() {
@@ -53,6 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const screenPlay = document.getElementById('screen-play');
   const targetPanel = document.getElementById('target-panel');
   const roundCounter = document.getElementById('round-counter');
+  const revealTimer = document.getElementById('reveal-timer');
   const guessSwatch = document.getElementById('guess-swatch');
   const sliderH = document.getElementById('slider-h');
   const sliderS = document.getElementById('slider-s');
@@ -96,9 +97,17 @@ document.addEventListener('DOMContentLoaded', () => {
     targetPanel.style.backgroundColor = hsvToCss(state.target.h, state.target.s, state.target.v);
     screenPlay.dataset.phase = 'reveal';
     console.log('target HSV:', state.target);
-    setTimeout(() => {
-      screenPlay.dataset.phase = 'guess';
-    }, REVEAL_MS);
+
+    const endAt = Date.now() + REVEAL_MS;
+    revealTimer.textContent = (REVEAL_MS / 1000).toFixed(1) + 's';
+    const tick = setInterval(() => {
+      const remaining = Math.max(0, endAt - Date.now());
+      revealTimer.textContent = (remaining / 1000).toFixed(1) + 's';
+      if (remaining <= 0) {
+        clearInterval(tick);
+        screenPlay.dataset.phase = 'guess';
+      }
+    }, 100);
   }
 
   startBtn.addEventListener('click', () => {
