@@ -18,7 +18,13 @@
       <div id="round-counter">Round 1 / 5</div>
       <div id="target-panel"></div>
       <div id="guess-panel">
-        <p>Make your guess</p>
+        <div id="guess-swatch"></div>
+        <div class="sliders">
+          <label>H <input type="range" id="slider-h" min="0" max="360" value="180"><span id="val-h">180</span></label>
+          <label>S <input type="range" id="slider-s" min="0" max="100" value="50"><span id="val-s">50</span></label>
+          <label>V <input type="range" id="slider-v" min="0" max="100" value="50"><span id="val-v">50</span></label>
+        </div>
+        <button id="submit-btn">Submit Guess</button>
       </div>
     </section>
 

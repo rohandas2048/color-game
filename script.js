@@ -46,6 +46,28 @@ document.addEventListener('DOMContentLoaded', () => {
   const screenPlay = document.getElementById('screen-play');
   const targetPanel = document.getElementById('target-panel');
   const roundCounter = document.getElementById('round-counter');
+  const guessSwatch = document.getElementById('guess-swatch');
+  const sliderH = document.getElementById('slider-h');
+  const sliderS = document.getElementById('slider-s');
+  const sliderV = document.getElementById('slider-v');
+  const valH = document.getElementById('val-h');
+  const valS = document.getElementById('val-s');
+  const valV = document.getElementById('val-v');
+
+  function currentGuess() {
+    return { h: +sliderH.value, s: +sliderS.value, v: +sliderV.value };
+  }
+
+  function updateGuessPreview() {
+    const g = currentGuess();
+    valH.textContent = g.h;
+    valS.textContent = g.s;
+    valV.textContent = g.v;
+    guessSwatch.style.backgroundColor = hsvToCss(g.h, g.s, g.v);
+  }
+
+  [sliderH, sliderS, sliderV].forEach(s => s.addEventListener('input', updateGuessPreview));
+  updateGuessPreview();
 
   function startRound() {
     state.target = randomHSV();
