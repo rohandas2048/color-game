@@ -12,10 +12,11 @@ function randomHSV() {
       v: pick([0, 100]),
     };
   }
+  const triangular = () => (Math.random() + Math.random()) / 2;
   return {
     h: Math.floor(Math.random() * 360),
-    s: Math.floor(Math.random() * 101),
-    v: Math.floor(Math.random() * 101),
+    s: Math.round(triangular() * 100),
+    v: Math.round(triangular() * 100),
   };
 }
 
