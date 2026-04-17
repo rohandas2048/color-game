@@ -1,7 +1,17 @@
 const REVEAL_MS = 3000;
 const TOTAL_ROUNDS = 5;
+const COLORBLIND_MODE = false;
+
+function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
 
 function randomHSV() {
+  if (COLORBLIND_MODE) {
+    return {
+      h: pick([0, 180]),
+      s: pick([0, 100]),
+      v: pick([0, 100]),
+    };
+  }
   return {
     h: Math.floor(Math.random() * 360),
     s: Math.floor(Math.random() * 101),
@@ -71,6 +81,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const valS = document.getElementById('val-s');
   const valV = document.getElementById('val-v');
 
+  if (COLORBLIND_MODE) {
+    sliderH.min = 0; sliderH.max = 180; sliderH.step = 180; sliderH.value = 0;
+    sliderS.min = 0; sliderS.max = 100; sliderS.step = 100; sliderS.value = 0;
+    sliderV.min = 0; sliderV.max = 100; sliderV.step = 100; sliderV.value = 100;
+  }
+
   function currentGuess() {
     return { h: +sliderH.value, s: +sliderS.value, v: +sliderV.value };
   }
@@ -91,7 +107,8 @@ document.addEventListener('DOMContentLoaded', () => {
     state.guesses.push({ target: state.target, guess: currentGuess() });
     if (state.round < TOTAL_ROUNDS) {
       state.round += 1;
-      sliderH.value = 180; sliderS.value = 50; sliderV.value = 50;
+      if (COLORBLIND_MODE) { sliderH.value = 0; sliderS.value = 0; sliderV.value = 100; }
+      else { sliderH.value = 180; sliderS.value = 50; sliderV.value = 50; }
       updateGuessPreview();
       startRound();
     } else {
