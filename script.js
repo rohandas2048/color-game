@@ -35,6 +35,15 @@ function hsvToCss(h, s, v) {
   return `rgb(${r}, ${g}, ${b})`;
 }
 
+function scoreGuess(target, guess) {
+  const dhRaw = Math.abs(target.h - guess.h);
+  const dh = Math.min(dhRaw, 360 - dhRaw) / 180;
+  const ds = Math.abs(target.s - guess.s) / 100;
+  const dv = Math.abs(target.v - guess.v) / 100;
+  const score = Math.round(100 * (1 - (dh + ds + dv) / 3));
+  return Math.max(0, score);
+}
+
 const state = {
   round: 1,
   target: null,
@@ -86,9 +95,40 @@ document.addEventListener('DOMContentLoaded', () => {
       updateGuessPreview();
       startRound();
     } else {
+      renderSummary();
       app.dataset.screen = 'summary';
-      console.log('final guesses:', state.guesses);
     }
+  });
+
+  const summaryRows = document.getElementById('summary-rows');
+  const totalScoreEl = document.getElementById('total-score');
+  const playAgainBtn = document.getElementById('play-again-btn');
+
+  function renderSummary() {
+    summaryRows.innerHTML = '';
+    let total = 0;
+    state.guesses.forEach((entry, i) => {
+      const s = scoreGuess(entry.target, entry.guess);
+      total += s;
+      const row = document.createElement('div');
+      row.className = 'summary-row';
+      row.innerHTML = `
+        <div class="round-label">${i + 1}</div>
+        <div class="swatch" style="background:${hsvToCss(entry.target.h, entry.target.s, entry.target.v)}" title="target"></div>
+        <div class="swatch" style="background:${hsvToCss(entry.guess.h, entry.guess.s, entry.guess.v)}" title="guess"></div>
+        <div class="score">${s}</div>
+      `;
+      summaryRows.appendChild(row);
+    });
+    totalScoreEl.textContent = `Total: ${total} / ${TOTAL_ROUNDS * 100}`;
+  }
+
+  playAgainBtn.addEventListener('click', () => {
+    resetState();
+    sliderH.value = 180; sliderS.value = 50; sliderV.value = 50;
+    updateGuessPreview();
+    app.dataset.screen = 'play';
+    startRound();
   });
 
   function startRound() {
