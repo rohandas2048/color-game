@@ -166,10 +166,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   playAgainBtn.addEventListener('click', () => {
     resetState();
-    sliderH.value = 180; sliderS.value = 50; sliderV.value = 50;
+    if (COLORBLIND_MODE) { sliderH.value = 0; sliderS.value = 0; sliderV.value = 100; }
+    else { sliderH.value = 180; sliderS.value = 50; sliderV.value = 50; }
     updateGuessPreview();
-    app.dataset.screen = 'play';
-    startRound();
+    app.dataset.screen = 'start';
   });
 
   function setSlidersDisabled(disabled) {
