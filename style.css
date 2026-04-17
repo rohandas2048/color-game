@@ -7,11 +7,21 @@ html, body {
 
 #app {
   min-height: 100vh;
-  display: flex;
+}
+
+#app > section {
+  display: none;
+  min-height: 100vh;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 1.5rem;
+}
+
+#app[data-screen="start"] #screen-start,
+#app[data-screen="play"] #screen-play,
+#app[data-screen="summary"] #screen-summary {
+  display: flex;
 }
 
 h1 {

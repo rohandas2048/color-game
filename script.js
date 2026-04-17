@@ -1,3 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
-  console.log('loaded');
+  const app = document.getElementById('app');
+  const startBtn = document.getElementById('start-btn');
+
+  function goTo(screen) {
+    app.dataset.screen = screen;
+  }
+
+  startBtn.addEventListener('click', () => goTo('play'));
 });
